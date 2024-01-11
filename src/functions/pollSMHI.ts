@@ -1,13 +1,13 @@
 import z from "zod";
 import { cities } from "../data/cities";
 
-const SMHI_ENDPOINT = "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/11.59/lat/57.43/data.json"
+const SMHI_ENDPOINT = "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point"
 
 export const handler = async (): Promise< {airTemp: number, timeStamp: string } | null> => {
   console.log("Polling weather data from SMHI!")
 
   const response = await (
-    await fetch(`https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${cities[0].longitude}/lat/${cities[0].latitude}/data.json`)
+    await fetch(`${SMHI_ENDPOINT}/lon/${cities[0].longitude}/lat/${cities[0].latitude}/data.json`)
     ).json();
     
   const result = responseSchema.safeParse(response);
@@ -17,13 +17,10 @@ export const handler = async (): Promise< {airTemp: number, timeStamp: string } 
     return null;
   }
 
-  const {
-    name,
-    values,
-  } = result.data.timeSeries[0].parameters[10];
+  const airTemp = result.data.timeSeries[0].parameters[10].values[0];
   const timeStamp = result.data.timeSeries[0].validTime;
 
-  return {airTemp: values[0], timeStamp: timeStamp}
+  return {airTemp: airTemp, timeStamp: timeStamp}
 
 };
 
