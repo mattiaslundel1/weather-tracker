@@ -1,24 +1,21 @@
-import { StackContext, Table, use } from "sst/constructs";
+import { RemovalPolicy } from "aws-cdk-lib/core";
+import { StackContext, Table, } from "sst/constructs";
 
 export function dbStack({ stack }: StackContext) {
   const db = new Table(stack, "weatherDB", {
     fields: {
       city: "string",
-      timestamp: "string",
-      airPressure: "number",
+      timeStamp: "string",
       airTemperature: "number",
-      cloudArea: "number",
-      humidity: "number",
-      windDirection: "number",
-      windSpeed: "number",
     },
 
-    primaryIndex: { partitionKey: "city", sortKey: "timestamp" },
-    defaults: {
-      function: {
-        bind: [],
-      },
-    },
+    primaryIndex: { partitionKey: "city", sortKey: "timeStamp" },
+    
+    cdk: {
+      table: {
+        removalPolicy: RemovalPolicy.DESTROY
+      }
+    }
   });
 
   stack.addOutputs({
