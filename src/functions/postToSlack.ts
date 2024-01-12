@@ -3,7 +3,6 @@ import { Config } from "sst/node/config";
 
 const SLACK_WEBHOOK = Config.SLACK_WEBHOOK
 
-
 export const handler = async (event: any): Promise<APIGatewayProxyResultV2> => {
   if(!event.Payload) {
     return {

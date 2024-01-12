@@ -1,4 +1,4 @@
-import { Function, StackContext, Cron, use, Config } from "sst/constructs";
+import { Function, StackContext, Cron, Config } from "sst/constructs";
 import * as sfn from "aws-cdk-lib/aws-stepfunctions";
 import * as tasks from "aws-cdk-lib/aws-stepfunctions-tasks";
 
@@ -14,6 +14,7 @@ export function weatherPollMachine({ stack }: StackContext) {
 
   const sPollYR = new tasks.LambdaInvoke(stack, "lambdaInvokerYR", {
     lambdaFunction: new Function(stack, "dataPollerYr", {
+      bind: [YR_ENDPOINT],
       handler: "src/functions/pollYR.handler",
     }),
     outputPath: "$.Payload",
@@ -21,6 +22,7 @@ export function weatherPollMachine({ stack }: StackContext) {
 
   const sPollSMHI = new tasks.LambdaInvoke(stack, "lambdaInvokerSMHI", {
     lambdaFunction: new Function(stack, "dataPollerSMHI", {
+      bind: [SMHI_ENDPOINT],
       handler: "src/functions/pollSMHI.handler",
     }),
     outputPath: "$.Payload",
