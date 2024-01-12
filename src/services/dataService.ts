@@ -1,4 +1,3 @@
-import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { Config } from "sst/node/config";
 import { OpenAI } from "openai";
 

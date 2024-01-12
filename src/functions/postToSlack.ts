@@ -1,4 +1,3 @@
-import { APIGatewayProxyResultV2 } from "aws-lambda";
 import { Config } from "sst/node/config";
 
 const SLACK_WEBHOOK = Config.SLACK_WEBHOOK
