@@ -1,13 +1,17 @@
-import { StackContext, Api, EventBus, use } from "sst/constructs";
+import { StackContext, Api, use } from "sst/constructs";
 import { userStack } from "./userStack";
+import { dbStack } from "./dbStack";
 
 export function API({ stack }: StackContext) {
   const userPoolStack = use(userStack);
+  const weatherData = use(dbStack)
 
   const api = new Api(stack, "api", {
     defaults: {
       function: {
+        bind: [weatherData.db],
         environment: {
+          WEATHER_DB: weatherData.db.tableName,
           USER_POOL_ID: userPoolStack.userPool.userPoolId,
           USER_CLIENT_ID: userPoolStack.userPoolClient.userPoolClientId,
         },
@@ -24,7 +28,7 @@ export function API({ stack }: StackContext) {
       },
     },
     routes: {
-      "GET /test": "src/functions/getData.handler",
+      "GET /weather/{city}": "src/functions/getData.handler",
     },
   });
 

@@ -9,7 +9,7 @@ export function dbStack({ stack }: StackContext) {
       airTemperature: "number",
     },
 
-    primaryIndex: { partitionKey: "city", sortKey: "timeStamp" },
+    primaryIndex: { partitionKey: "city"},
     
     cdk: {
       table: {

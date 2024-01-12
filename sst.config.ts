@@ -13,8 +13,8 @@ export default {
   },
   stacks(app) {
     app.stack(userStack);
-    app.stack(API);
     app.stack(dbStack);
+    app.stack(API);
     app.stack(weatherPollMachine);
   }
 } satisfies SSTConfig;
