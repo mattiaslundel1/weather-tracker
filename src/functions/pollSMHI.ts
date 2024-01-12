@@ -1,7 +1,8 @@
 import z from "zod";
 import { cities } from "../data/cities";
+import { Config } from "sst/node/config";
 
-const SMHI_ENDPOINT = "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point"
+const SMHI_ENDPOINT = Config.SMHI_ENDPOINT
 
 export const handler = async (): Promise< {airTemp: number, timeStamp: string } | null> => {
   console.log("Polling weather data from SMHI!")

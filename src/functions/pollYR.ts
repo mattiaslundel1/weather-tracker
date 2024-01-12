@@ -1,7 +1,8 @@
 import z from "zod";
 import { cities } from "../data/cities";
+import { Config } from "sst/node/config";
 
-const YR_ENDPOINT = "https://api.met.no/weatherapi/locationforecast/2.0/compact.json"
+const YR_ENDPOINT = Config.YR_ENDPOINT
 
 export const handler = async (): Promise< {airTemp: number, timeStamp: string} | null > => {
   console.log("Polling weather data from YR.no!")

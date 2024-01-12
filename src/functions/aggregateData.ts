@@ -17,7 +17,6 @@ export const handler = async (
   return {avgTemp: avgTemp.toString(), timeStamp: data[0].timeStamp};
 };
 
-
 const validDataSchema = z.array(
   z.object({
     airTemp: z.number(),

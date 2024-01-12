@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "sst dev",
+    "dev": "sst dev --stage dev",
     "build": "sst build",
-    "deploy": "sst deploy",
+    "deploy": "sst deploy --stage prod",
     "remove": "sst remove",
     "console": "sst console",
     "typecheck": "tsc --noEmit"
@@ -25,6 +25,7 @@
     "@aws-sdk/client-sfn": "^3.485.0",
     "@aws-sdk/lib-dynamodb": "^3.485.0",
     "aws-lambda": "^1.0.7",
+    "openai": "^4.24.4",
     "zod": "^3.22.4"
   }
 }
