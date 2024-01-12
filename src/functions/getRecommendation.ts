@@ -5,8 +5,8 @@ import { cities } from "../data/cities";
 export const handler = async (
   event: any
 ): Promise< string |  null> => {
+  console.log("GENERATING RECOMMENDATION!")
 
-  console.log(event)
   const result = inputSchema.safeParse(event)
   if(!result.success) {
     console.log(result.error)

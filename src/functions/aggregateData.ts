@@ -3,7 +3,7 @@ import { z } from "zod";
 export const handler = async (
   event: any
 ): Promise<{avgTemp: string, timeStamp: string} | null> => {
-  console.log("Aggregating data!");
+  console.log("AGGREGATING DATA!");
 
   const result = validDataSchema.safeParse(event);
   if (!result.success) {

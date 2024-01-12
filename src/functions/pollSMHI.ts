@@ -5,7 +5,7 @@ import { Config } from "sst/node/config";
 const SMHI_ENDPOINT = Config.SMHI_ENDPOINT
 
 export const handler = async (): Promise< {airTemp: number, timeStamp: string } | null> => {
-  console.log("Polling weather data from SMHI!")
+  console.log("POLLING SMHI!")
 
   const response = await (
     await fetch(`${SMHI_ENDPOINT}/lon/${cities[0].longitude}/lat/${cities[0].latitude}/data.json`)

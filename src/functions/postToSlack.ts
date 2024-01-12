@@ -3,11 +3,11 @@ import { Config } from "sst/node/config";
 
 const SLACK_WEBHOOK = Config.SLACK_WEBHOOK
 
-export const handler = async (event: any): Promise<APIGatewayProxyResultV2> => {
+
+export const handler = async (event: any): Promise<void> => {
+  console.log("POSTING MESSAGE TO SLACK!")
   if(!event.Payload) {
-    return {
-      statusCode: 400,
-    }
+    return;
   }
 
   const payload = {
@@ -22,10 +22,6 @@ export const handler = async (event: any): Promise<APIGatewayProxyResultV2> => {
     body: JSON.stringify(payload)
   })
 
-  console.log("RESPONSE: ", response)
-
-  return {
-    statusCode: 200
-  }
+  return;
 
 }

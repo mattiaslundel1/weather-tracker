@@ -5,7 +5,7 @@ import { Config } from "sst/node/config";
 const YR_ENDPOINT = Config.YR_ENDPOINT
 
 export const handler = async (): Promise< {airTemp: number, timeStamp: string} | null > => {
-  console.log("Polling weather data from YR.no!")
+  console.log("POLLING YR.no!")
 
   const response = await (
     await fetch(`${YR_ENDPOINT}?lat=${cities[0].latitude}&lon=${cities[0].longitude}`)
