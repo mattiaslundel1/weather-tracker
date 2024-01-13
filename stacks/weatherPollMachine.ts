@@ -78,7 +78,7 @@ export function weatherPollMachine({ stack }: StackContext) {
 
   // START EXECUTION OF STATEMACHINE
   const cron = new Cron(stack, "initializeStateMachine", {
-    schedule: "cron(00 07 * * ? *)",
+    schedule: "cron(00 05 * * ? *)",
     job: startExecution,
   });
 
