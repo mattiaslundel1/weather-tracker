@@ -12,6 +12,7 @@ export function weatherPollMachine({ stack }: StackContext) {
   const OPEN_AI_KEY = new Config.Secret(stack, "OPEN_AI_KEY",);
   const SMHI_ENDPOINT = new Config.Secret(stack, "SMHI_ENDPOINT",);
   const YR_ENDPOINT = new Config.Secret(stack, "YR_ENDPOINT",);
+  const STATE_MACHINE_ARN = new Config.Secret(stack, "STATE_MACHINE_ARN",);
   
   // STATE DEFINITIONS
 
