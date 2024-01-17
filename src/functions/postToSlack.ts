@@ -11,7 +11,6 @@ const SLACK_WEBHOOK = Config.SLACK_WEBHOOK;
 export const handler = async (event: any): Promise<APIGatewayProxyResultV2> => {
   console.log("POSTING MESSAGE TO SLACK!");
 
-  console.log("EVENT IN SLACK: ", event);
   if (!event) {
     return {
       statusCode: 400,
@@ -19,14 +18,16 @@ export const handler = async (event: any): Promise<APIGatewayProxyResultV2> => {
     };
   }
 
-  let payload;
-  if (typeof event === "string") {
-    payload = {
-      text: event,
-    };
-  } else {
-    payload = event;
+  let payload
+  if(event.Payload) {
+  payload = {
+    text: event.Payload
   }
+} else {
+  payload = {
+    text: event
+  }
+}
 
   const response = await fetch(SLACK_WEBHOOK, {
     method: "POST",
@@ -36,11 +37,9 @@ export const handler = async (event: any): Promise<APIGatewayProxyResultV2> => {
     body: JSON.stringify(payload),
   });
 
-  console.log("RESPONSE IN SLACK:", response);
 
   return {
-    statusCode: 200,
-    body: JSON.stringify({ 200: "Ok" }),
+    statusCode: response.status,
   };
 };
 

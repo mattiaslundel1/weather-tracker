@@ -55,13 +55,15 @@ describe("[weatherStylist]", async () => {
 
   describe("[PostToSlack]", async () => {
     it("returns statuscode OK", async () => {
+
+      const input = {
+        Payload: "testing"
+      }
       const res = await testState({
         stateMachineArn: stateMachine.stateMachineArn,
         taskName: "lambdaInvokePostToSlack",
-        input: JSON.stringify("test"),
+        input: JSON.stringify(input),
       });
-
-      console.log(res);
 
       expect(res.StatusCode).toBe(200);
     });
@@ -78,7 +80,7 @@ describe("[weatherStylist]", async () => {
         }),
       });
 
-      expect(res.Payload).toBeTypeOf({ message: "string" });
+      expect(res.Payload).toBeTypeOf("string");
     });
   });
 });

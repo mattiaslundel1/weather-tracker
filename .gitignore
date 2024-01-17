@@ -10,6 +10,8 @@ node_modules
 
 # misc
 .DS_Store
+.vscode
+.gitignore
 
 # local env files
 .env*.local
