@@ -18,14 +18,16 @@ export const handler = async (
     return null
   }
 
-  const {avgTemp, timeStamp} = result.data
-  const recommendation = await DataService.generateRecommendation(cities[0].name, timeStamp, avgTemp)
+  const {avgTemp, avgWindSpeed, avgPrecipitation, timeStamp} = result.data
+  const recommendation = await DataService.generateRecommendation(cities[0].name, timeStamp, avgTemp, avgWindSpeed, avgPrecipitation)
 
   return recommendation;
 };
 
 const inputSchema = z.object({
   avgTemp: z.string(),
+  avgWindSpeed: z.string(),
+  avgPrecipitation: z.string(),
   timeStamp: z.string()
 })
 

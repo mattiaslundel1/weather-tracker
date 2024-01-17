@@ -8,7 +8,7 @@ const SMHI_ENDPOINT = Config.SMHI_ENDPOINT
  * Triggered by a Cron Job once a day. Fetches weather data from SMHI.se and filters out the latest reading of the air temperature.
  * @returns {string, string} - A tuple containing the air temperature and timestamp.
  */
-export const handler = async (): Promise< {airTemp: number, timeStamp: string } | null> => {
+export const handler = async (): Promise< {airTemp: number, windSpeed: number, precipitation: number, timeStamp: string } | null> => {
   console.log("POLLING SMHI!")
 
   const response = await (
@@ -23,9 +23,11 @@ export const handler = async (): Promise< {airTemp: number, timeStamp: string } 
   }
 
   const airTemp = result.data.timeSeries[0].parameters[10].values[0];
+  const windSpeed = result.data.timeSeries[0].parameters[14].values[0];
+  const precipitation = result.data.timeSeries[0].parameters[3].values[0];
   const timeStamp = result.data.timeSeries[0].validTime;
 
-  return {airTemp: airTemp, timeStamp: timeStamp}
+  return {airTemp: airTemp, windSpeed: windSpeed, precipitation: precipitation, timeStamp: timeStamp}
 
 };
 

@@ -7,7 +7,7 @@ import { z } from "zod";
  */
 export const handler = async (
   event: any
-): Promise<{avgTemp: string, timeStamp: string} | null> => {
+): Promise<{avgTemp: string, avgWindSpeed: string, avgPrecipitation: string, timeStamp: string} | null> => {
   console.log("AGGREGATING DATA!");
 
   const result = validDataSchema.safeParse(event);
@@ -17,14 +17,18 @@ export const handler = async (
   }
 
   const data = result.data;
-  const avgTemp = (data[0].airTemp+data[1].airTemp)/2
+  const avgTemp = (data[0].airTemp + data[1].airTemp)/2
+  const avgWindSpeed = (data[0].windSpeed + data[1].windSpeed)/2
+  const avgPrecipitation = (data[0].precipitation + data[1].precipitation)/2
 
-  return {avgTemp: avgTemp.toString(), timeStamp: data[0].timeStamp};
+  return {avgTemp: avgTemp.toString(), avgWindSpeed: avgWindSpeed.toString(), avgPrecipitation: avgPrecipitation.toString(), timeStamp: data[0].timeStamp};
 };
 
 const validDataSchema = z.array(
   z.object({
     airTemp: z.number(),
+    windSpeed: z.number(),
+    precipitation: z.number(),
     timeStamp: z.string()
   })
 );

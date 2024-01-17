@@ -1,3 +1,10 @@
+// https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/11.59/lat/57.43/data.json
+
+
+//https://api.yr.no/weatherapi/locationforecast/2.0/forecast?lat=57.43&lon=11.59
+
+
+
 /**
  * A list of swedish cities and their coordinates.
  */
