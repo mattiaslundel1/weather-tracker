@@ -9,18 +9,14 @@
     "deploy": "sst deploy --stage prod",
     "remove": "sst remove",
     "console": "sst console",
-    "typecheck": "tsc --noEmit",
-    "test": "npx playwright test",
-    "test:ui": "npx playwright test --ui"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@playwright/test": "^1.41.0",
     "@tsconfig/node18": "^18.2.2",
     "@types/aws-lambda": "^8.10.131",
     "@types/node": "^20.10.8",
     "aws-cdk-lib": "2.110.1",
     "constructs": "10.3.0",
-    "playwright": "^1.41.0",
     "sst": "^2.39.2",
     "typescript": "^5.3.3"
   },
