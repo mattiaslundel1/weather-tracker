@@ -28,3 +28,7 @@ const inputSchema = z.object({
   avgTemp: z.string(),
   timeStamp: z.string()
 })
+
+export default {
+  handler
+}

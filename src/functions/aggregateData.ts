@@ -29,3 +29,6 @@ const validDataSchema = z.array(
   })
 );
 
+export default {
+  handler
+}

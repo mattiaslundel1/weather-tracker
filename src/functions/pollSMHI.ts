@@ -44,3 +44,7 @@ const responseSchema = z.object({
     })
   )
 })
+
+export default {
+  handler
+}

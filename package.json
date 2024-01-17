@@ -9,7 +9,9 @@
     "deploy": "sst deploy --stage prod",
     "remove": "sst remove",
     "console": "sst console",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui"
   },
   "devDependencies": {
     "@playwright/test": "^1.41.0",
