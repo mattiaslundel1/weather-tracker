@@ -4,6 +4,10 @@ import { Config } from "sst/node/config";
 
 const YR_ENDPOINT = Config.YR_ENDPOINT
 
+/**
+ * Triggered by a Cron Job. Fetches weather data from YR.no and filters out the latest reading of the air temperature.
+ * @returns {string:, string} - A tuple containing the air temperature and the timestamp
+ */
 export const handler = async (): Promise< {airTemp: number, timeStamp: string} | null > => {
   console.log("POLLING YR.no!")
 

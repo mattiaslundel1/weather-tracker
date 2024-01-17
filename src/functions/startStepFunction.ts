@@ -1,8 +1,10 @@
 import { SFNClient, StartExecutionCommand } from "@aws-sdk/client-sfn";
 
-
 const SFN_CLIENT = new SFNClient({})
 
+/**
+ * Function that starts the execution of the step function.
+ */
 export const handler = async (): Promise<void> => {
   console.log("STARTING STATEMACHINE!")
 

@@ -4,6 +4,10 @@ import { Config } from "sst/node/config";
 
 const SMHI_ENDPOINT = Config.SMHI_ENDPOINT
 
+/**
+ * Triggered by a Cron Job once a day. Fetches weather data from SMHI.se and filters out the latest reading of the air temperature.
+ * @returns {string, string} - A tuple containing the air temperature and timestamp.
+ */
 export const handler = async (): Promise< {airTemp: number, timeStamp: string } | null> => {
   console.log("POLLING SMHI!")
 

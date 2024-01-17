@@ -1,3 +1,6 @@
+/**
+ * A list of swedish cities and their coordinates.
+ */
 export const cities = [
   {
     name: "gothenburg",
