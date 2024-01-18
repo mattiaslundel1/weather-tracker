@@ -10,7 +10,8 @@ describe("[weatherStylist]", async () => {
   const WIND_SPEED = 10;
   const AVG_WIND_SPEED = "10";
   const PRECIPITATION = 20;
-  const AVG_PRECIPITATION = "20"; 
+  const AVG_PRECIPITATION = "20";
+  const RECOMMENDATION = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit hendrerit ullamcorper. In eu aliquam tellus, placerat molestie diam. Phasellus elit sem, aliquam in ex ac, commodo pulvinar nulla. Aenean sollicitudin tortor finibus elit tincidunt viverra. Praesent vehicula ante quis diam accumsan sollicitudin. Sed pellentesque ex a sem vehicula congue."
 
   const stateMachine = await getStateMachine(STATE_MACHINE_ARN);
 
@@ -75,7 +76,7 @@ describe("[weatherStylist]", async () => {
     it("returns statuscode OK", async () => {
 
       const input = {
-        Payload: "testing"
+        Payload: RECOMMENDATION
       }
       const res = await testState({
         stateMachineArn: stateMachine.stateMachineArn as string,
