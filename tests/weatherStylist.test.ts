@@ -48,7 +48,7 @@ describe("[weatherStylist]", async () => {
   });
 
   describe("[AggregateData]", async () => {
-    it("returns an average airTemp and a timestamp", async () => {
+    it("returns averages of weather data", async () => {
       const res = await testState({
         stateMachineArn: stateMachine.stateMachineArn as string,
         taskName: "lambdaInvokerAggr",
@@ -61,13 +61,13 @@ describe("[weatherStylist]", async () => {
       expect(res).keys(["avgTemp", "avgWindSpeed", "avgPrecipitation", "timeStamp"]);
       expect(res).toBeTypeOf("object");
       expect(typeof res.avgTemp).toBe("string");
-      expect(typeof res.avgTemp).toEqual(AVG_TEMPERATURE);
+      expect(res.avgTemp).toEqual(AVG_TEMPERATURE);
       expect(typeof res.avgWindSpeed).toBe("string");
-      expect(typeof res.avgWindSpeed).toEqual(AVG_WIND_SPEED);
+      expect(res.avgWindSpeed).toEqual(AVG_WIND_SPEED);
       expect(typeof res.avgPrecipitation).toBe("string");
-      expect(typeof res.avgPrecipitation).toEqual(AVG_PRECIPITATION);
+      expect(res.avgPrecipitation).toEqual(AVG_PRECIPITATION);
       expect(typeof res.timeStamp).toBe("string");
-      expect(typeof res.timeStamp).toEqual(TIME_STAMP);
+      expect(res.timeStamp).toEqual(TIME_STAMP);
     });
   });
 
