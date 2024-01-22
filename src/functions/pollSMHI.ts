@@ -2,33 +2,42 @@ import z from "zod";
 import { cities } from "../data/cities";
 import { Config } from "sst/node/config";
 
-const SMHI_ENDPOINT = Config.SMHI_ENDPOINT
+const SMHI_ENDPOINT = Config.SMHI_ENDPOINT;
+
+// NOTE: Iv've formatted this file & made some minor stuff to improve readability
+// compare the diff in github / git diff and note the changes
 
 /**
  * Triggered by a Cron Job once a day. Fetches weather data from SMHI.se and filters out the latest reading of the air temperature.
  * @returns {string, string} - A tuple containing the air temperature and timestamp.
  */
-export const handler = async (): Promise< {airTemp: number, windSpeed: number, precipitation: number, timeStamp: string } | null> => {
-  console.log("POLLING SMHI!")
-
-  const response = await (
-    await fetch(`${SMHI_ENDPOINT}/lon/${cities[0].longitude}/lat/${cities[0].latitude}/data.json`)
-    ).json();
-    
-  const result = responseSchema.safeParse(response);
+export const handler = async (): Promise<{
+  airTemp: number;
+  windSpeed: number;
+  precipitation: number;
+  timeStamp: string;
+} | null> => {
+  const res = await fetch(
+    `${SMHI_ENDPOINT}/lon/${cities[0].longitude}/lat/${cities[0].latitude}/data.json`,
+  );
+  const json = await res.json();
+  const result = responseSchema.safeParse(json);
 
   if (!result.success) {
     console.log(result.error.message);
+
     return null;
   }
 
-  const airTemp = result.data.timeSeries[0].parameters[10].values[0];
-  const windSpeed = result.data.timeSeries[0].parameters[14].values[0];
-  const precipitation = result.data.timeSeries[0].parameters[3].values[0];
-  const timeStamp = result.data.timeSeries[0].validTime;
+  const { timeSeries } = result.data;
+  const firstSeries = timeSeries.at(0);
 
-  return {airTemp: airTemp, windSpeed: windSpeed, precipitation: precipitation, timeStamp: timeStamp}
-
+  return {
+    airTemp: firstSeries?.parameters[AIR_TMP].values.at(0) ?? NaN,
+    windSpeed: firstSeries?.parameters[WIND_SPEED].values.at(0) ?? NaN,
+    precipitation: firstSeries?.parameters[PRECIPITATION].values.at(0) ?? NaN,
+    timeStamp: firstSeries?.validTime ?? "n/a",
+  };
 };
 
 const responseSchema = z.object({
@@ -39,14 +48,17 @@ const responseSchema = z.object({
       parameters: z.array(
         z.object({
           name: z.string(),
-          values: z.array(
-            z.number())
-        })
-      )
-    })
-  )
-})
+          values: z.array(z.number()),
+        }),
+      ),
+    }),
+  ),
+});
+
+const AIR_TMP = 0;
+const WIND_SPEED = 14;
+const PRECIPITATION = 10;
 
 export default {
-  handler
-}
+  handler,
+};

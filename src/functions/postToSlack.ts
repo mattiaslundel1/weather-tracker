@@ -18,6 +18,9 @@ export const handler = async (event: any): Promise<APIGatewayProxyResultV2> => {
     };
   }
 
+  // TODO: the formatting here is a bit funkey
+  // use zod to determine the event structure, don't use two different if cases, looks like a hack
+
   let payload
   if(event.Payload) {
   payload = {

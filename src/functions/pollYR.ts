@@ -4,6 +4,11 @@ import { Config } from "sst/node/config";
 
 const YR_ENDPOINT = Config.YR_ENDPOINT
 
+
+// TODO: install prettier (and define a formatting config), some lines are very long
+// Usually project have alimit of 80-120 char len per line.
+// Look in Pollsmhi and note how I changed stuff.
+
 /**
  * Triggered by a Cron Job. Fetches weather data from YR.no and filters out the latest reading of the air temperature.
  * @returns {string:, string} - A tuple containing the air temperature and the timestamp
@@ -11,10 +16,13 @@ const YR_ENDPOINT = Config.YR_ENDPOINT
 export const handler = async (): Promise< {airTemp: number, windSpeed: number, precipitation: number, timeStamp: string} | null > => {
   console.log("POLLING YR.no!")
 
+  // TODO: I'd split split ut these two calls to improve the readability of the program/call sequence.
+  // The indentaiton is off here as well, should be fixed once you make use of a formatter.
   const response = await (
     await fetch(`${YR_ENDPOINT}?lat=${cities[0].latitude}&lon=${cities[0].longitude}`)
     ).json();
 
+    // TODO: Typ err -> response is unkown, hence propeties is any
     const result = ZodProperties.safeParse(response.properties);
 
     if (!result.success) {
@@ -22,6 +30,8 @@ export const handler = async (): Promise< {airTemp: number, windSpeed: number, p
       return null;
     }
 
+
+    // TODO: excessive line length and return stement, pretty hard to read
     const air_temperature = result.data.timeseries![0].data.instant.details.air_temperature
     const wind_speed = result.data.timeseries![0].data.instant.details.wind_speed;
     const precipitation_amount = result.data.timeseries![0].data.next_1_hours!.details.precipitation_amount;
