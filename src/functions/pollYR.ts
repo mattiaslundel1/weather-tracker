@@ -1,43 +1,44 @@
-import z from "zod";
-import { cities } from "../data/cities";
-import { Config } from "sst/node/config";
+import z from 'zod';
+import { cities } from '../data/cities';
+import { Config } from 'sst/node/config';
 
-const YR_ENDPOINT = Config.YR_ENDPOINT
-
-
-// TODO: install prettier (and define a formatting config), some lines are very long
-// Usually project have alimit of 80-120 char len per line.
-// Look in Pollsmhi and note how I changed stuff.
+const YR_ENDPOINT = Config.YR_ENDPOINT;
 
 /**
  * Triggered by a Cron Job. Fetches weather data from YR.no and filters out the latest reading of the air temperature.
  * @returns {string:, string} - A tuple containing the air temperature and the timestamp
  */
-export const handler = async (): Promise< {airTemp: number, windSpeed: number, precipitation: number, timeStamp: string} | null > => {
-  console.log("POLLING YR.no!")
+export const handler = async (): Promise<{
+  airTemp: number;
+  windSpeed: number;
+  precipitation: number;
+  timeStamp: string;
+} | null> => {
+  const response = await fetch(
+    `${YR_ENDPOINT}?lat=${cities[0].latitude}&lon=${cities[0].longitude}`,
+  );
 
-  // TODO: I'd split split ut these two calls to improve the readability of the program/call sequence.
-  // The indentaiton is off here as well, should be fixed once you make use of a formatter.
-  const response = await (
-    await fetch(`${YR_ENDPOINT}?lat=${cities[0].latitude}&lon=${cities[0].longitude}`)
-    ).json();
+  const json = JSON.parse(await response.text());
 
-    // TODO: Typ err -> response is unkown, hence propeties is any
-    const result = ZodProperties.safeParse(response.properties);
+  const result = ZodProperties.safeParse(json);
 
-    if (!result.success) {
-      console.log(result.error.message);
-      return null;
-    }
+  if (!result.success) {
+    console.log(result.error.message);
 
+    return null;
+  }
 
-    // TODO: excessive line length and return stement, pretty hard to read
-    const air_temperature = result.data.timeseries![0].data.instant.details.air_temperature
-    const wind_speed = result.data.timeseries![0].data.instant.details.wind_speed;
-    const precipitation_amount = result.data.timeseries![0].data.next_1_hours!.details.precipitation_amount;
-    const timeStamp = result.data.timeseries![0].time
+  const timeSeries = result.data.properties.timeseries[0];
 
-    return { airTemp: air_temperature, windSpeed: wind_speed, precipitation: precipitation_amount, timeStamp: timeStamp }
+  const { air_temperature, wind_speed } = timeSeries.data.instant.details;
+  const { precipitation_amount } = timeSeries.data.next_1_hours!.details;
+
+  return {
+    airTemp: air_temperature,
+    windSpeed: wind_speed,
+    precipitation: precipitation_amount,
+    timeStamp: timeSeries.time,
+  };
 };
 
 const ZodDetails = z.object({
@@ -53,9 +54,11 @@ const ZodNext1HoursDetails = z.object({
   precipitation_amount: z.number(),
 });
 
-const ZodNext1Hours = z.object({
-  details: ZodNext1HoursDetails,
-}).optional();
+const ZodNext1Hours = z
+  .object({
+    details: ZodNext1HoursDetails,
+  })
+  .optional();
 
 const ZodTimeseries = z.array(
   z.object({
@@ -64,13 +67,15 @@ const ZodTimeseries = z.array(
       instant: ZodInstant,
       next_1_hours: ZodNext1Hours,
     }),
-  })
+  }),
 );
 
 const ZodProperties = z.object({
-  timeseries: ZodTimeseries.optional(),
+  properties: z.object({
+    timeseries: ZodTimeseries.min(1),
+  }),
 });
 
 export default {
-  handler
-}
+  handler,
+};

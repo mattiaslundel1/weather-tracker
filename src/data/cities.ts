@@ -4,18 +4,16 @@
 // YR URL
 //https://api.yr.no/weatherapi/locationforecast/2.0/forecast?lat=57.43&lon=11.59
 
-
-
 /**
  * A list of swedish cities and their coordinates.
  */
 export const cities = [
   {
-    name: "gothenburg",
+    name: 'gothenburg',
     latitude: 57.43,
     longitude: 11.59,
   },
- /*  {
+  /*  {
     name: "stockholm",
     latitude: 59.33,
     longitude: 18.07
@@ -75,5 +73,4 @@ export const cities = [
     latitude: 60.37,
     longitude: 15.37
   }, */
-  
-]
+];

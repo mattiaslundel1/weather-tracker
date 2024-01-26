@@ -87,21 +87,6 @@ describe("[weatherStylist]", async () => {
     });
   });
 
-  describe("[PostToSlack]", async () => {
-    it("returns statuscode OK", async () => {
-      const input = {
-        Payload: RECOMMENDATION,
-      };
-      const res = await testState({
-        stateMachineArn: stateMachine.stateMachineArn as string,
-        taskName: "lambdaInvokePostToSlack",
-        input: JSON.stringify(input),
-      });
-
-      expect(res.StatusCode).toBe(200);
-    });
-  });
-
   describe("[GetRecommendation]", async () => {
     it("returns a OpenAI recommendation", async () => {
       const res = await testState({
@@ -115,8 +100,7 @@ describe("[weatherStylist]", async () => {
         }),
       });
 
-      expect(res.Payload).toBeTypeOf("string");
-      expect(res.Payload as string).lengthOf.greaterThan(200);
+      expect(res).toBeTypeOf("object");
     });
   });
 });

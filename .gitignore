@@ -11,6 +11,8 @@ node_modules
 # misc
 .DS_Store
 .vscode
+.gitignore
+.prettierrc
 
 # local env files
 .env*.local

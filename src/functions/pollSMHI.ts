@@ -1,6 +1,6 @@
-import z from "zod";
-import { cities } from "../data/cities";
-import { Config } from "sst/node/config";
+import z from 'zod';
+import { cities } from '../data/cities';
+import { Config } from 'sst/node/config';
 
 const SMHI_ENDPOINT = Config.SMHI_ENDPOINT;
 
@@ -36,7 +36,7 @@ export const handler = async (): Promise<{
     airTemp: firstSeries?.parameters[AIR_TMP].values.at(0) ?? NaN,
     windSpeed: firstSeries?.parameters[WIND_SPEED].values.at(0) ?? NaN,
     precipitation: firstSeries?.parameters[PRECIPITATION].values.at(0) ?? NaN,
-    timeStamp: firstSeries?.validTime ?? "n/a",
+    timeStamp: firstSeries?.validTime ?? 'n/a',
   };
 };
 
@@ -55,9 +55,9 @@ const responseSchema = z.object({
   ),
 });
 
-const AIR_TMP = 0;
+const AIR_TMP = 10;
 const WIND_SPEED = 14;
-const PRECIPITATION = 10;
+const PRECIPITATION = 3;
 
 export default {
   handler,

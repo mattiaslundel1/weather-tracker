@@ -1,5 +1,6 @@
-import { APIGatewayProxyResultV2 } from "aws-lambda";
-import { Config } from "sst/node/config";
+import { APIGatewayProxyResultV2 } from 'aws-lambda';
+import { Config } from 'sst/node/config';
+import { z } from 'zod';
 
 const SLACK_WEBHOOK = Config.SLACK_WEBHOOK;
 
@@ -8,42 +9,24 @@ const SLACK_WEBHOOK = Config.SLACK_WEBHOOK;
  * @param event - The payload from the state before (Generate a recommendation from OpenAI). It includes the recommendation that is going to be posted to slack
  * @returns {void}
  */
-export const handler = async (event: any): Promise<APIGatewayProxyResultV2> => {
-  console.log("POSTING MESSAGE TO SLACK!");
-
-  if (!event) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: "400 - Bad request" }),
-    };
-  }
-
-  // TODO: the formatting here is a bit funkey
-  // use zod to determine the event structure, don't use two different if cases, looks like a hack
-
-  let payload
-  if(event.Payload) {
-  payload = {
-    text: event.Payload
-  }
-} else {
-  payload = {
-    text: event
-  }
-}
+export const handler = async (event: unknown) => {
+  const { text } = z.object({ text: z.string() }).parse(event);
 
   const response = await fetch(SLACK_WEBHOOK, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-type": "application/json",
+      'Content-type': 'application/json',
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      text,
+    }),
   });
 
+  if (!response.ok) {
+    throw new Error('Failed to send slack msg');
+  }
 
-  return {
-    statusCode: response.status,
-  };
+  return text;
 };
 
 export default {
