@@ -56,7 +56,7 @@ export function weatherPollMachine({ stack }: StackContext) {
     'lambdaInvokerRecommendation',
     {
       lambdaFunction: new Function(stack, 'fashionRecommender', {
-        timeout: '60 seconds',
+        timeout: '2 minutes',
         bind: [OPEN_AI_KEY],
         handler: 'src/functions/getRecommendation.handler',
       }),

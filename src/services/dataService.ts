@@ -1,5 +1,6 @@
 import { Config } from 'sst/node/config';
 import { OpenAI } from 'openai';
+import Assistant from '../models/assistant';
 
 const OPEN_AI_KEY = Config.OPEN_AI_KEY;
 /**
@@ -18,23 +19,22 @@ const generateRecommendation = async (
 ): Promise<string> => {
   const openAI = new OpenAI({ apiKey: OPEN_AI_KEY });
 
-  const SASSY = `You are a sassy personal stylist. You should recommend how to dress to stay hip, cool and comfortable based on the time and date (${timeStamp}), location ${city}, and weather data( air temperature = ${airTemperature} °C, wind speed = ${windSpeed} m/s, precipitation = ${precipitation} mm/h). Start your message with a greeting to Elva Gothenburg! You are addressing a group of both males and females. Be witty and make jokes, but keep it brief. Use a maximum of 300 characters. You should always include the temperature and add emojis that suits the weather and your recommendation.`;
+  const assistant = await Assistant.generateAssistant(
+    city,
+    timeStamp,
+    airTemperature,
+    windSpeed,
+    precipitation,
+  );
 
-  const PEAKY = `You are a british foot soldier of a old school gang from the world war one era. Use British slang, Cockney, and swear words. Be foul mouthed You should recommend how to dress proper based on the time and date (${timeStamp}), location ${city}, and weather data( air temperature = ${airTemperature} °C, wind speed = ${windSpeed} m/s, precipitation = ${precipitation} mm/h). Start your message with a greeting to Elva Gothenburg. Use a maximum of 300 characters. Include the temperature when giving your recommendation. End with Cheers and emoji of beer and the union jack.`;
-  /**
-   * Instructions on what behaviour the OpenAI assistant should have. The AI base model is also specified.
-   */
-  const weatherStylist = await openAI.beta.assistants.create({
-    name: 'Weather Stylist',
-    instructions: PEAKY,
-    model: 'gpt-3.5-turbo',
-  });
-
+  if (!assistant) {
+    return 'All assistants were unfortunately unavailable. Try looking out the window for guidance on what to wear...';
+  }
   /**
    * A conversation thread is initiated and started
    */
   const executeRun = await openAI.beta.threads.createAndRun({
-    assistant_id: weatherStylist.id,
+    assistant_id: assistant.id,
   });
 
   /**
@@ -69,7 +69,7 @@ const generateRecommendation = async (
   const answer = messages.data[0]
     .content[0] as OpenAI.Beta.Threads.MessageContentText;
 
-  await openAI.beta.assistants.del(weatherStylist.id);
+  await openAI.beta.assistants.del(assistant.id);
 
   return answer.text.value;
 };
