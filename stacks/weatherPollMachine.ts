@@ -31,9 +31,9 @@ export function weatherPollMachine({ stack }: StackContext) {
   });
 
   sPollYR.addRetry({
-    interval: Duration.seconds(5),
-    maxAttempts: 2,
-  })
+    interval: Duration.seconds(10),
+    maxAttempts: 3,
+  });
 
   const sPollSMHI = new tasks.LambdaInvoke(stack, 'lambdaInvokerSMHI', {
     lambdaFunction: new Function(stack, 'dataPollerSMHI', {
@@ -44,9 +44,9 @@ export function weatherPollMachine({ stack }: StackContext) {
   });
 
   sPollSMHI.addRetry({
-    interval: Duration.seconds(5),
-    maxAttempts: 2
-  })
+    interval: Duration.seconds(10),
+    maxAttempts: 2,
+  });
 
   /**
    * The latest data readings air temperature is averaged and the result is fed forward in the Payload.
@@ -74,6 +74,11 @@ export function weatherPollMachine({ stack }: StackContext) {
       outputPath: '$.Payload',
     },
   );
+
+  sGenerateRecommendation.addRetry({
+    interval: Duration.seconds(10),
+    maxAttempts: 2
+  })
 
   /**
    * The recommendation is finally posted to Slack.

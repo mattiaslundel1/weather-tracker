@@ -1,6 +1,7 @@
 import { Config } from 'sst/node/config';
 import { OpenAI } from 'openai';
 import Assistant from '../models/assistant';
+import getRecommendation from '../functions/getRecommendation';
 
 const OPEN_AI_KEY = Config.OPEN_AI_KEY;
 /**
@@ -17,8 +18,6 @@ const generateRecommendation = async (
   windSpeed: string,
   precipitation: string,
 ): Promise<string> => {
-  const openAI = new OpenAI({ apiKey: OPEN_AI_KEY });
-
   const assistant = await Assistant.generateAssistant(
     city,
     timeStamp,
@@ -26,10 +25,12 @@ const generateRecommendation = async (
     windSpeed,
     precipitation,
   );
+  const openAI = new OpenAI({ apiKey: OPEN_AI_KEY });
 
   if (!assistant) {
     return 'All assistants were unfortunately unavailable. Try looking out the window for guidance on what to wear...';
   }
+
   /**
    * A conversation thread is initiated and started
    */
@@ -69,6 +70,7 @@ const generateRecommendation = async (
   const answer = messages.data[0]
     .content[0] as OpenAI.Beta.Threads.MessageContentText;
 
+  console.info('Assistant log: ', messages.data);
   await openAI.beta.assistants.del(assistant.id);
 
   return answer.text.value;

@@ -18,8 +18,7 @@ export const handler = async (): Promise<{
     `${YR_ENDPOINT}?lat=${cities[0].latitude}&lon=${cities[0].longitude}`,
   );
 
-  const json = JSON.parse(await response.text());
-
+  const json = await response.json()
   const result = ZodProperties.safeParse(json);
 
   if (!result.success) {
