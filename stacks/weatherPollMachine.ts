@@ -77,8 +77,8 @@ export function weatherPollMachine({ stack }: StackContext) {
 
   sGenerateRecommendation.addRetry({
     interval: Duration.seconds(10),
-    maxAttempts: 2
-  })
+    maxAttempts: 2,
+  });
 
   /**
    * The recommendation is finally posted to Slack.

@@ -8,7 +8,6 @@ import { cities } from '../data/cities';
  * @returns {string} - returns a recommendation on what to wear from a OpenAI assistant.
  */
 export const handler = async (event: any): Promise<{ text: string } | null> => {
-
   const result = inputSchema.safeParse(event);
   if (!result.success) {
     console.log(result.error);
@@ -16,6 +15,7 @@ export const handler = async (event: any): Promise<{ text: string } | null> => {
   }
 
   const { avgTemp, avgWindSpeed, avgPrecipitation, timeStamp } = result.data;
+
   const recommendation = await DataService.generateRecommendation(
     cities[0].name,
     timeStamp,
