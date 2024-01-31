@@ -1,6 +1,7 @@
 import { Function, StackContext, Cron, Config } from 'sst/constructs';
 import * as sfn from 'aws-cdk-lib/aws-stepfunctions';
 import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
+import { Duration } from 'aws-cdk-lib/core';
 
 /**
  * Step-function definition. A Cron job polls weather data once every day and feeds. The average temperature is taken and fed to an OpenAI assistant that returns a reccomendation on what to wear based on the weather.
@@ -29,6 +30,11 @@ export function weatherPollMachine({ stack }: StackContext) {
     outputPath: '$.Payload',
   });
 
+  sPollYR.addRetry({
+    interval: Duration.seconds(5),
+    maxAttempts: 2,
+  })
+
   const sPollSMHI = new tasks.LambdaInvoke(stack, 'lambdaInvokerSMHI', {
     lambdaFunction: new Function(stack, 'dataPollerSMHI', {
       bind: [SMHI_ENDPOINT],
@@ -36,6 +42,11 @@ export function weatherPollMachine({ stack }: StackContext) {
     }),
     outputPath: '$.Payload',
   });
+
+  sPollSMHI.addRetry({
+    interval: Duration.seconds(5),
+    maxAttempts: 2
+  })
 
   /**
    * The latest data readings air temperature is averaged and the result is fed forward in the Payload.
