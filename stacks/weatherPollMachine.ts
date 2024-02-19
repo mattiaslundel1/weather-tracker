@@ -70,6 +70,7 @@ export function weatherPollMachine({ stack }: StackContext) {
         timeout: '2 minutes',
         bind: [OPEN_AI_KEY],
         handler: 'src/functions/getRecommendation.handler',
+        
       }),
       outputPath: '$.Payload',
     },

@@ -32,6 +32,9 @@ const generateAssistant = async (
     model: 'gpt-3.5-turbo',
   });
 
+  console.log('assistant: ', assistant)
+  console.log('personality: ', personality)
+
   return assistant;
 };
 

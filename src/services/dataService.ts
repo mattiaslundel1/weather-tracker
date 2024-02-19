@@ -70,7 +70,8 @@ const generateRecommendation = async (
   const answer = messages.data[0]
     .content[0] as OpenAI.Beta.Threads.MessageContentText;
 
-  console.info('Assistant log: ', messages.data);
+  console.info('Data log: ', messages.data[0]);
+  console.info('Content log: ', messages.data[0].content);
   await openAI.beta.assistants.del(assistant.id);
 
   return answer.text.value;
