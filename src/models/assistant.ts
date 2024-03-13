@@ -32,8 +32,8 @@ const generateAssistant = async (
     model: 'gpt-3.5-turbo',
   });
 
-  console.log('assistant: ', assistant)
-  console.log('personality: ', personality)
+  console.log('assistant: ', assistant);
+  console.log('personality: ', personality);
 
   return assistant;
 };
@@ -88,8 +88,11 @@ const getPersonality = (
     '',
   ];
 
-  const randomPersonality = Math.floor(Math.random() * personalities.length);
-  return personalities[randomPersonality];
+  let randomPersonality = Math.floor(Math.random() * personalities.length);
+
+  return randomPersonality === 10
+    ? personalities[randomPersonality - 1]
+    : personalities[randomPersonality];
 };
 
 export default {
